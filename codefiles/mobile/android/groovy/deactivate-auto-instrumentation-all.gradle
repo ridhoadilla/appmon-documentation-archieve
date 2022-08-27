@@ -1,0 +1,11 @@
+dynatrace {
+    pluginEnabled false
+    configurations {
+        dev {
+            // variant-specific properties
+        }
+        prod {
+            // variant-specific properties
+        }
+    }
+}

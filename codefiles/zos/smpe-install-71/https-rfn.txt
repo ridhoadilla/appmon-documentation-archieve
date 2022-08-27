@@ -1,0 +1,101 @@
+//RFNHNST JOB ('ACCTINFO'),'User name or comment',NOTIFY=&SYSUID,
+//             MSGLEVEL=(1,1),CLASS=A,MSGCLASS=X
+//*
+//* This job obtains Dynatrace 7.1 install pax files using RFN. Step 1
+//* executes GIMGTPGK to receive the pax files from the HTTPS server
+//* and store them in a USS directory. Step 2 executes GIMUNZIP to
+//* to unpack the pax files.
+//*
+//* Change the JOB card and the SET statements below to meet          
+//* site standards. If the default HLQ is changed, a matching change  
+//* is required when running subsequent install and maintenance jobs.
+//* This sample is using javahome in its default location and         
+//* pointing to Java 8.0.  It also uses the default javatruststore    
+//* to get the certificate.  You may need to change these depending   
+//* on your Java setup and levels.                                    
+//*
+//* The hash value below should be correct for the current product
+//* cumulative maintenance level, which changes monthly.
+//*
+//* You may clean up the "/u/myuserid/DT71" and the "&HLQ..DTMF.LZDT710"
+//* file after the SMP/E job is complete.  To run the Maintance job     
+//* RFNHMNT or FRNFMNT you will need to empty the DT71 USS directory.   
+//*
+// EXPORT SYMLIST=(HLQ,USSDIR,VOLUME,HASH,JAVAPATH)
+// SET HLQ='DT'                  <===== SET HLQ HERE
+// SET USSDIR='/u/myuserid'      <===== SET USS home/temp directory
+// SET VOLUME='VOLSER'           <===== SET VOLSER
+// SET JAVAPATH='/usr/lpp/java/J8.0/' <===== SET JAVA PATH
+// SET HASH='EFD7CC4F6534B85881337063DDF6EB2D3BF4BC64'   <==== Nov 2019
+//*
+//* For use with z/OS V1, delete the previous lines, remove SYMBOLS= from
+//* the SYSIN DD, and issue the edit command: C &HLQ. <newHLQ>
+//*
+//* Run GIMTGTPKG to obtain the install package from the FTP site
+//*
+//GIMGTPKG EXEC PGM=GIMGTPKG,REGION=0M                                 
+//SMPOUT   DD SYSOUT=*                                                 
+//SYSPRINT DD SYSOUT=*                                                 
+//SMPNTS   DD PATH='&USSDIR',PATHDISP=KEEP                             
+//SMPCPATH DD PATH='/usr/lpp/smp/classes/',PATHDISP=KEEP               
+//SMPJHOME DD PATH='&JAVAPATH',PATHDISP=KEEP                 
+//SMPCLNT  DD *,SYMBOLS=EXECSYS                                        
+<CLIENT                                                                
+  downloadmethod="https"                                               
+  downloadkeyring="javatruststore"                                     
+  javahome="&JAVAPATH"                                        
+  >                                                                    
+</CLIENT>                                                              
+/*                                                                     
+//SMPSRVR  DD *,SYMBOLS=EXECSYS                                        
+<SERVER host="files.dynatrace.com">                                    
+  <PACKAGE                                                             
+    file="/downloads/OnPrem/dynaTrace/7.1/mainframe/GIMZIP/GIMPAF.XML"
+    hash="&HASH"                                                       
+    id="DT71">                                                         
+  </PACKAGE>                                                           
+</SERVER>                                                              
+/*                                                                     
+//*
+//* Run GIMUNZIP to unpack the pax files
+//*
+//INSUNZIP EXEC PGM=GIMUNZIP,REGION=0M,COND=(0,NE)
+//*
+//SYSUT3   DD UNIT=SYSALLDA,SPACE=(CYL,(50,10))
+//SYSUT4   DD UNIT=SYSALLDA,SPACE=(CYL,(25,5))
+//* Message output datasets:
+//SMPOUT   DD SYSOUT=*
+//SYSPRINT DD SYSOUT=*
+//SMPDIR   DD PATH='&USSDIR/DT71',PATHDISP=KEEP
+//SMPCPATH DD PATH='/usr/lpp/smp/classes/',PATHDISP=KEEP
+//SMPJHOME DD PATH='&JAVAPATH',PATHDISP=KEEP
+//SYSIN    DD *,SYMBOLS=EXECSYS
+<GIMUNZIP>
+  <ARCHDEF
+   name="SMPPTFIN/S0001.DT.R070100.MEDIA.PROD.DTMF.LZDT710.MNT.pax.Z"
+   volume="&VOLUME"
+   newname="&HLQ..DTMF.LZDT710.MNT">
+  </ARCHDEF>
+  <ARCHDEF
+   name="SMPPTFIN/S0002.DT.R070100.MEDIA.PROD.DTMF.LZDT710.MCS.pax.Z"
+   volume="&VOLUME"
+   newname="&HLQ..DTMF.LZDT710.MCS">
+  </ARCHDEF>
+  <ARCHDEF
+   name="SMPRELF/DT.R070100.MEDIA.PROD.DTMF.LZDT710.F1.pax.Z"
+   volume="&VOLUME"
+   newname="&HLQ..DTMF.LZDT710.F1">
+  </ARCHDEF>
+  <ARCHDEF
+   name="SMPRELF/DT.R070100.MEDIA.PROD.DTMF.LZDT710.F2.pax.Z"
+   volume="&VOLUME"
+   newname="&HLQ..DTMF.LZDT710.F2">
+  </ARCHDEF>
+  <ARCHDEF
+   name="SMPRELF/DT.R070100.MEDIA.PROD.DTMF.LZDT710.F3.pax.Z"
+   volume="&VOLUME"
+   newname="&HLQ..DTMF.LZDT710.F3">
+  </ARCHDEF>
+</GIMUNZIP>
+/*
+// 

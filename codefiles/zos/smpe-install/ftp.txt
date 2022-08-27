@@ -1,0 +1,69 @@
+//FTPINSTL JOB ('ACCTINFO'),'User name or comment',NOTIFY=&SYSUID,
+//             MSGLEVEL=(1,1),CLASS=A,MSGCLASS=X
+//*
+//* This job obtains OneAgent install XMIT files using FTP
+//* and issues the TSO RECEIVE command to unpack them.
+//*
+//* Change the JOB card and the HLQ on the SET statement below to meet
+//* site standards. If the default HLQ is changed, a matching change
+//* is required when running subsequent install and maintenance jobs.
+//*
+// EXPORT SYMLIST=(HLQ)
+// SET HLQ='<MY_HLQ>'
+//*
+//* For use with z/OS V1, delete the previous lines, remove
+//* SYMBOLS= from he SYSIN DD, and issue the edit command:
+//* C &HLQ. <newHLQ>
+//*
+//FTP     EXEC PGM=FTP,DYNAMNBR=20,PARM='(EXIT TIMEOUT 99',TIME=5
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *,SYMBOLS=EXECSYS
+us-et-ftp01.dynatrace.com
+Dynatrace72
+dynatrace72
+binary
+locsite fwfriendly
+locsite recfm=fb lrecl=80 blksize=27920
+locsite tracks primary=5 secondary=5
+get MCS '&HLQ..DTMF.LZDT720.MCS.XMIT' (REPLACE
+locsite tracks primary=1 secondary=1
+get F1 '&HLQ..DTMF.LZDT720.F1.XMIT' (REPLACE
+locsite tracks primary=30 secondary=15
+get F2 '&HLQ..DTMF.LZDT720.F2.XMIT' (REPLACE
+locsite tracks primary=45 secondary=15
+get F3 '&HLQ..DTMF.LZDT720.F3.XMIT' (REPLACE
+locsite tracks primary=300 secondary=15
+get MNT '&HLQ..DTMF.LZDT720.MNT.XMIT' (REPLACE
+quit
+/*
+//*
+//RECEIVE  EXEC PGM=IKJEFT01,DYNAMNBR=20,COND=(0,NE)
+//SYSPRINT DD  SYSOUT=*
+//SYSTSPRT DD  SYSOUT=*
+//SYSTSIN  DD  *,SYMBOLS=EXECSYS
+ RECEIVE INDSN('&HLQ..DTMF.LZDT720.MCS.XMIT') NODISPLAY
+ DATASET('&HLQ..DTMF.LZDT720.MCS') +
+ RELEASE
+ RECEIVE INDSN('&HLQ..DTMF.LZDT720.F1.XMIT') NODISPLAY
+ DATASET('&HLQ..DTMF.LZDT720.F1') +
+ RELEASE
+ RECEIVE INDSN('&HLQ..DTMF.LZDT720.F2.XMIT') NODISPLAY
+ DATASET('&HLQ..DTMF.LZDT720.F2') +
+ RELEASE
+ RECEIVE INDSN('&HLQ..DTMF.LZDT720.F3.XMIT') NODISPLAY
+ DATASET('&HLQ..DTMF.LZDT720.F3') +
+ RELEASE
+ RECEIVE INDSN('&HLQ..DTMF.LZDT720.MNT.XMIT') NODISPLAY
+ DATASET('&HLQ..DTMF.LZDT720.MNT') +
+ RELEASE
+/*
+//XMITDEL  EXEC PGM=IDCAMS,REGION=1024K,COND=(0,NE)
+//SYSPRINT DD  SYSOUT=*
+//SYSIN    DD  *,SYMBOLS=EXECSYS
+ DEL &HLQ..DTMF.LZDT720.MCS.XMIT PURGE
+ DEL &HLQ..DTMF.LZDT720.F1.XMIT PURGE
+ DEL &HLQ..DTMF.LZDT720.F2.XMIT PURGE
+ DEL &HLQ..DTMF.LZDT720.F3.XMIT PURGE
+ DEL &HLQ..DTMF.LZDT720.MNT.XMIT PURGE
+/*
+//

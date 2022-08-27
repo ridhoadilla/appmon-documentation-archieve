@@ -1,0 +1,9 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            webRequests {
+                // your web request monitoring configuration
+            }
+        }
+    }
+}

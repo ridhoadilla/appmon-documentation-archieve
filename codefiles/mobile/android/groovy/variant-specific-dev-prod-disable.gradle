@@ -1,0 +1,15 @@
+dynatrace {
+    configurations {
+        debug {
+            variantFilter "[dD]ebug"
+            enabled false
+        }
+        prod {
+            variantFilter "[rR]elease"
+            autoStart {
+                applicationId '<ProductionApplicationID>'
+                agentPath '<ProductionAgentPathUrl>'
+            }
+        }
+    }
+}

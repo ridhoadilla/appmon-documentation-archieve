@@ -1,0 +1,11 @@
+apply plugin: 'com.dynatrace.instrumentation'
+dynatrace {
+    configurations {
+        sampleConfig {
+            autoStart {
+                applicationId '<YourApplicationID>'
+                agentPath '<YourAgentPathUrl>'
+            }
+        }
+    }
+}

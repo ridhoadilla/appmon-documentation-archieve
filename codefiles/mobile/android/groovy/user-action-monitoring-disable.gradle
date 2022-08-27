@@ -1,0 +1,7 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            userActions.enabled false
+        }
+    }
+}

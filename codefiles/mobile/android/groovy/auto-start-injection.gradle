@@ -1,0 +1,10 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            autoStart {
+                applicationId '<YourApplicationID>'
+                agentPath '<YourAgentPathUrl>'
+            }
+        }
+    }
+}

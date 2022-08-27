@@ -1,0 +1,9 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            debug {
+                certificateValidation false
+            }
+        }
+    }
+}

@@ -1,0 +1,7 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            lifecycle.enabled false
+        }
+    }
+}

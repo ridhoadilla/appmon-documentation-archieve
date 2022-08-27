@@ -1,0 +1,11 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            lifecycle {
+                sensors {
+                    fragment false
+                }
+            }
+        }
+    }
+}

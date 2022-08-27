@@ -1,0 +1,11 @@
+dynatrace {
+    configurations {
+        dev {
+            enabled false
+            variantFilter "Debug"
+        }
+        prod {
+            // variant-specific properties
+        }
+    }
+}

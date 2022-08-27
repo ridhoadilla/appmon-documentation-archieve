@@ -1,0 +1,11 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            exclude {
+                packages "com.mypackage", "com.another.example"
+                classes "com.example.MyClass"
+                methods "com.example.ExampleClass.exampleMethod", "com.example.ExampleClass\$InnerClass.anotherMethod"
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            hybridWebView {
+                enabled true
+                domains '<domain1>', '<domain2>'
+                domains '<anotherDomain>'
+            }
+        }
+    }
+}

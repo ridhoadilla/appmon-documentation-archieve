@@ -1,0 +1,11 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            lifecycle {
+                sensors {
+                    // fine-tune the sensors if necessary
+                }
+            }
+        }
+    }
+}

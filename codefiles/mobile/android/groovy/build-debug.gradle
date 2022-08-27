@@ -1,0 +1,23 @@
+dynatrace {
+    configurations {
+        developer {
+            variantFilter "[dD]ebug"
+            autoStart {
+                applicationId '<DebugApplicationID>'
+                agentPath '<DebugAgentPathUrl>'
+            }
+        }
+        ciTesting {
+            // deactivate instrumentation for CI tests
+            variantFilter "CI"
+            enabled false
+        }
+        prod {
+            variantFilter "[rR]elease"
+            autoStart {
+                applicationId '<ProductionApplicationID>'
+                agentPath '<ProductionAgentPathUrl>'
+            }
+        }
+    }
+}

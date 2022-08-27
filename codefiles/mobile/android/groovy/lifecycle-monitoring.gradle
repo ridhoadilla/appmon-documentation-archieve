@@ -1,0 +1,9 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            lifecycle {
+                // your lifecycle monitoring configuration
+            }
+        }
+    }
+}

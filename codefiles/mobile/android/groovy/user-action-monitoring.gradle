@@ -1,0 +1,9 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            userActions {
+                // your user action monitoring configuration
+            }
+        }
+    }
+}

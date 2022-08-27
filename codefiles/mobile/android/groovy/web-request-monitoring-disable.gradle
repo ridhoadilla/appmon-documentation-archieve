@@ -1,0 +1,7 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            webRequests.enabled false
+        }
+    }
+}

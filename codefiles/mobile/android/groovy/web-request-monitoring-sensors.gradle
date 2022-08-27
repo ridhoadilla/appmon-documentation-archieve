@@ -1,0 +1,11 @@
+dynatrace {
+    configurations {
+        sampleConfig {
+            webRequests {
+                sensors {
+                    // fine-tune the sensors if necessary
+                }
+            }
+        }
+    }
+}

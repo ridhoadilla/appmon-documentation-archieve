@@ -1,0 +1,9 @@
+android {
+    buildTypes {
+        // build type used for unit tests in the CI
+        CI {
+            initWith debug
+            applicationIdSuffix ".debugTesting"
+        }
+    }
+}

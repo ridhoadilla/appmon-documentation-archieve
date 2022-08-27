@@ -1,0 +1,9 @@
+dynatrace {
+    strictMode false
+    configurations {
+        prod {
+            variantFilter "Release"
+            // other variant-specific properties
+        }
+    }
+}
